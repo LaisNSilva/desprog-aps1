@@ -26,6 +26,13 @@ int verify(point p, point a, point b) {
         y_min = b.y;
     }
 
+    if (p.x == a.x && p.y == a.y){
+        return 2;
+    }
+    if (p.x == b.x && p.y == b.y){
+        return 2;
+    }
+
 
     
     // se a.x e b.x forem iguais
