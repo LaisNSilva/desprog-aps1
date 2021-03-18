@@ -85,7 +85,7 @@ int verify(point p, point a, point b) {
             }
             // se não estiver no segmento o raio cruza toda a aresta
             else{
-                return 1;
+                return 0;
             }
         }
         // se não tem o mesmo y o raio a direita não cruza essa aresta
