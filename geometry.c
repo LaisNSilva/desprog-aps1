@@ -59,7 +59,7 @@ int verify(point p, point a, point b) {
             // se estiver nos limites de y o raio cruza
             //apenas de p.x estiver a esquerda da linha
             if(p.x < a.x){
-                if (p.y > y_min && p.y<y_max){
+                if (p.y > y_min && p.y <= y_max){
                     return 1;
                 }
                 // se esta fora dos limites o raio não curza
@@ -125,7 +125,7 @@ int verify(point p, point a, point b) {
             
             // está contido da reta, mas não sei ainda se está fora dos limites do segmento
             // se está contido no segmento
-            if (p.y > y_min && p.y<y_max){
+            if (p.y > y_min && p.y < y_max){
                 return 2;
             }
             // se está na reta mas não no segmento, esta para fora
@@ -137,7 +137,7 @@ int verify(point p, point a, point b) {
 
         // não está sobre a reta
         else {
-            if (p.y > y_min && p.y<y_max){
+            if (p.y > y_min && p.y <= y_max){
                 if(p.x < x_min){
                     return 1;
                 } else {
