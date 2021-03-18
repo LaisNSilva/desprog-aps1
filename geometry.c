@@ -13,7 +13,7 @@ int verify(point p, point a, point b) {
     }
     else{
         x_max = b.x;
-        x_min = b.x;
+        x_min = a.x;
     }
     int y_max;
     int y_min;
@@ -23,7 +23,7 @@ int verify(point p, point a, point b) {
     }
     else{
         y_max = b.y;
-        y_min = b.y;
+        y_min = a.y;
     }
 
     if (p.x == a.x && p.y == a.y){
@@ -98,11 +98,21 @@ int verify(point p, point a, point b) {
         double verifica = y_ponto-eq_reta;
         if (verifica < 0){
             verifica = eq_reta-y_ponto;
-            
         }
+        // printf("a.x: %d\n", a.x);
+        // printf("a.y: %d\n", a.y);
+        // printf("b.x: %d\n", b.x);
+        // printf("b.y: %d\n", b.y);
+        // printf("verifica: %f\n", verifica);
+        // printf("y_ponto: %f\n", y_ponto);
+        // printf("eq_reta: %f\n", eq_reta);
         
         //printf("y_ponto = %f", y_ponto);
-        if (verifica<0.000001){
+        if (verifica<=0.000001){
+            // printf("%f\n", verifica);
+            // printf("%d\n", p.y);
+            // printf("%d\n", y_min);
+            // printf("%d\n", y_max);
             
             // está contido da reta, mas não sei ainda se está fora dos limites do segmento
             // se está contido no segmento
@@ -117,34 +127,73 @@ int verify(point p, point a, point b) {
         }
 
         // não está sobre a reta
-        else{
+        else {
+            if (p.y >= y_min && p.y<=y_max){
+                if(p.x < x_min){
+                    return 1;
+                } else {
+                    if(p.x < x_max){
+                        for(int i = p.x; i<= x_max; i++){
+                            // descobre o y da reta para cada x do raio
+                            double v = m*(i - a.x)+a.y;
+                            double verifica2 = y_ponto-v;
+                            if (verifica2 < 0){
+                                verifica2 = v-y_ponto;
+                            }
+                            if (verifica2<0.000001){
+                                return 1;
+                            }
+                        }
+                    } else {
+                        return 0;
+                    }
+                }
+            } else {
+                return 0;
+            }
+            
             // vai fazer o raio para a direita
-            for(int i = p.x; i<= x_max; i++ ){
+            // if (p.y >= y_min && p.y<=y_max){
+            //     if(p.x < x_max)
+            // }
+
+            /*depois voltar talvez
+            for(int i = p.x; i<= x_max; i++){
                 // descobre o y da reta para cada x do raio
                 double v = m*(i - a.x)+a.y;
                 double verifica2 = y_ponto-v;
                 if (verifica2<0){
                     verifica2 = v-y_ponto;
                 }
+                printf("a.x: %d\n", a.x);
+                printf("a.y: %d\n", a.y);
+                printf("b.x: %d\n", b.x);
+                printf("b.y: %d\n", b.y);
+                printf("i: %d\n", i);
+
+                // printf("v: %f\n", v);
+                // printf("p.x: %d\n", p.x);
+                // printf("p.y: %d\n", p.y);
+                // printf("x_min: %d\n", x_min);
+                // printf("x_max: %d\n", x_max);
                 // verifica se y da reta é igual ao y do ponto (pq o raio a direita so muda x e não o y)
                 if (verifica2<0.000001){
                     // verifica de y está nos limites
                     if (p.y >= y_min && p.y<=y_max){
+                        // printf("ola ola ola ");
                         return 1;
                     }
-                    else{
+                    else {
                         return 0;
                     }
                     
-                } 
+                }
 
-            }
+            }*/
 
         }
 
     }
-    
-    
     return 0;
 }
 
