@@ -98,26 +98,26 @@ int verify(point p, point a, point b) {
 
     else{
         // sem divisões por zero
-        double m = (double)(a.y-b.y)/(a.x - b.x);
+        double m = (double)(a.y-b.y)/ (double)(a.x - b.x);
         double eq_reta = (double) m*(p.x - a.x)+a.y;
         double y_ponto = (double)p.y;
         double verifica = y_ponto-eq_reta;
         if (verifica < 0){
             verifica = eq_reta-y_ponto;
         }
-        // printf("a.x: %d\n", a.x);
-        // printf("a.y: %d\n", a.y);
-        // printf("b.x: %d\n", b.x);
-        // printf("b.y: %d\n", b.y);
-        // printf("p.x: %d\n", p.x);
-        // printf("p.y: %d\n", p.y);
-        // printf("m: %f\n", m);
-        // printf("verifica: %f\n", verifica);
-        // printf("y_ponto: %f\n", y_ponto);
-        // printf("eq_reta: %f\n", eq_reta);
+        printf("a.x: %d\n", a.x);
+        printf("a.y: %d\n", a.y);
+        printf("b.x: %d\n", b.x);
+        printf("b.y: %d\n", b.y);
+        printf("p.x: %d\n", p.x);
+        printf("p.y: %d\n", p.y);
+        printf("m: %f\n", m);
+        printf("verifica: %f\n", verifica);
+        printf("y_ponto: %f\n", y_ponto);
+        printf("eq_reta: %f\n", eq_reta);
         
         //printf("y_ponto = %f", y_ponto);
-        if (verifica<=0.000001){
+        if (verifica < 0.000001){
             // printf("%f\n", verifica);
             // printf("%d\n", p.y);
             // printf("%d\n", y_min);
@@ -138,7 +138,7 @@ int verify(point p, point a, point b) {
         // não está sobre a reta
         else {
             if (p.y > y_min && p.y <= y_max){
-                if(p.x < x_min){
+                if(p.x <= x_min){
                     return 1;
                 } else {
                     double x_ponto = (double) p.x;
