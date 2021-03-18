@@ -1,60 +1,56 @@
-#include <math.h>
 #include <stdio.h>
-
 #include "geometry.h"
 
+#define MIN_DIFF 0.000001
+
+int see_this_case(point p, point a, point b, int* cont){
+    int see_case = verify(p, a, b);
+    if (see_case == 2){
+        return 1;
+    } else if (see_case == 1){
+        *cont = *cont + 1;
+    }
+    return 0;
+}
+
+int see_final_count(int value){
+    if (value % 2 == 0) return 0;
+    return 1;
+}
+
+double absolute(double a, double b){
+    if (a > b){
+        return (double) a-b;
+    }
+    return (double) b-a;
+}
 
 int verify(point p, point a, point b) {
-    int x_max;
-    int x_min;
-    if(a.x>= b.x){
-        x_max = a.x;
-        x_min = b.x;
-    }
-    else{
+    int x_max = a.x, x_min = b.x;
+    int y_max = a.y, y_min = b.y;
+
+    if(a.x < b.x){
         x_max = b.x;
         x_min = a.x;
     }
-    int y_max;
-    int y_min;
-    if(a.y>= b.y){
-        y_max = a.y;
-        y_min = b.y;
-    }
-    else{
+
+    if(a.y < b.y){
         y_max = b.y;
         y_min = a.y;
     }
 
-    if (p.x == a.x && p.y == a.y){
-        return 2;
-    }
-    if (p.x == b.x && p.y == b.y){
-        return 2;
-    }
+    if ((p.x == a.x && p.y == a.y) || (p.x == b.x && p.y == b.y)) return 2;
 
     if (a.x == b.x){
         if (p.x == a.x){
-            if (p.y > y_min && p.y < y_max){
-                return 2;
-            }
-            else{
-                return 0;
-            }
+            if (p.y > y_min && p.y < y_max) return 2;
+            return 0;            
         }
         else{
             if(p.x < a.x){
-                if (p.y > y_min && p.y <= y_max){
-                    return 1;
-                }
-                else{
-                    return 0;
-                }
+                if (p.y > y_min && p.y <= y_max) return 1;
             }
-            else{
-                return 0;
-            }
-            
+            return 0;            
         }
     }
 
@@ -63,31 +59,18 @@ int verify(point p, point a, point b) {
             if (p.x >= x_min && p.x<=x_max){
                 return 2;
             }
-            else{
-                return 0;
-            }
         }
-        else{
-            return 0;
-        }
+        return 0;
     }
 
-    else{
-        double m = (double)(a.y-b.y)/ (double)(a.x - b.x);
-        double eq_reta = (double) m*(p.x - a.x)+a.y;
-        double y_ponto = (double)p.y;
-        double verifica = y_ponto-eq_reta;
-        if (verifica < 0){
-            verifica = eq_reta-y_ponto;
-        }
-        if (verifica < 0.000001){
-            if (p.y > y_min && p.y < y_max){
-                return 2;
-            }
-            else{
-                return 0;
-            }
-            
+    else {
+        double m = (double) (a.y-b.y)/(a.x - b.x);
+        double eq_reta = (double) m*(p.x - a.x) + a.y;
+        double y_point_double = (double) p.y;
+        double check_diff = absolute(y_point_double, eq_reta);
+        if (check_diff < MIN_DIFF){
+            if (p.y > y_min && p.y < y_max) return 2;
+            return 0; 
         }
         else {
             if (p.y > y_min && p.y <= y_max){
@@ -96,22 +79,13 @@ int verify(point p, point a, point b) {
                 } else {
                     double x_ponto = (double) p.x;
                     if(p.x < x_max){
-                        for(double i = x_ponto; i <= x_max; i += 0.000001){
-                            double v = (double) m*(i - a.x)+a.y;
-                            double verifica2 = (double) y_ponto-v;
-                            if (verifica2 < 0){
-                                verifica2 = (double) v-y_ponto;
-                            }
-                            if (verifica2 < 0.000001){
-                                return 1;
-                            }
+                        for(double i = x_ponto; i <= x_max; i += MIN_DIFF){
+                            double value_y = (double) m*(i - a.x)+a.y;
+                            double check_diff_2 = absolute(y_point_double, value_y);
+                            if (check_diff_2 < MIN_DIFF) return 1;
                         }
-                    } else {
-                        return 0;
                     }
                 }
-            } else {
-                return 0;
             }
         }
     }
@@ -119,36 +93,14 @@ int verify(point p, point a, point b) {
 }
 
 int inside(point p, point poly[], int n) {
-    
-    int contador=0;
-    for(int i=0; i<(n-1); i++){
-        int ver = verify(p, poly[i], poly[i+1]);
-        if (ver ==2){
-            return 1;
-        }
-        if (ver == 1){
-            contador++;
-        }
-
-    }
-    // verificando a ultima aresta
-    int ultima = verify(p, poly[n-1], poly[0]);
-    if (ultima ==2){
-        return 1;
-    }
-    if (ultima==1){
-        contador++;
-    }
-    printf("contador %d\n", contador);
-
-    if(contador%2==0){
-        return 0;
-    }
-    else{
-        return 1;
+    int count = 0;
+    for(int i = 0; i < n-1; i++){
+        int check = see_this_case(p, poly[i], poly[i+1], &count);
+        if (check == 1) return check;
     }
 
+    int check_last_case = see_this_case(p, poly[n-1], poly[0], &count);
+    if (check_last_case == 1) return check_last_case;
 
-
-    
+    return see_final_count(count);
 }
