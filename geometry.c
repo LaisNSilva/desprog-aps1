@@ -143,7 +143,7 @@ int verify(point p, point a, point b) {
                 } else {
                     double x_ponto = (double) p.x;
                     if(p.x < x_max){
-                        for(int i = x_ponto; i <= x_max; i += 1){
+                        for(double i = x_ponto; i <= x_max; i += 0.000001){
                             // descobre o y da reta para cada x do raio 
                             double v = (double) m*(i - a.x)+a.y;
                             double verifica2 = (double) y_ponto-v;
