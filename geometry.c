@@ -119,5 +119,36 @@ int verify(point p, point a, point b) {
 }
 
 int inside(point p, point poly[], int n) {
-    return 0;
+    
+    int contador=0;
+    for(int i=0; i<(n-1); i++){
+        int ver = verify(p, poly[i], poly[i+1]);
+        if (ver ==2){
+            return 1;
+        }
+        if (ver == 1){
+            contador++;
+        }
+
+    }
+    // verificando a ultima aresta
+    int ultima = verify(p, poly[n-1], poly[0]);
+    if (ultima ==2){
+        return 1;
+    }
+    if (ultima==1){
+        contador++;
+    }
+    printf("contador %d\n", contador);
+
+    if(contador%2==0){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+
+
+
+    
 }
